@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "mutex": "cpp",
+        "streambuf": "cpp",
+        "functional": "cpp"
+    }
+}

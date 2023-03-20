@@ -47,6 +47,7 @@
 #include <gecode/float.hh>
 #endif
 #include <gecode/flatzinc.hh>
+#include <gecode/flatzinc/blackbox.hh>
 
 namespace Gecode { namespace FlatZinc {
 
@@ -1562,6 +1563,12 @@ namespace Gecode { namespace FlatZinc {
       member(s,x,y,s.arg2BoolVar(ce[2]),s.ann2ipl(ann));
     }
 
+    void p_blackbox(FlatZincSpace& s, const ConExpr& ce, AST::Node* ann) {
+      IntVarArgs input = s.arg2intvarargs(ce[0]);
+      IntVarArgs out = s.arg2intvarargs(ce[1]);
+      FlatZinc::black_box(s, input, out);
+    }
+
     class IntPoster {
     public:
       IntPoster(void) {
@@ -1749,6 +1756,8 @@ namespace Gecode { namespace FlatZinc {
         registry().add("gecode_member_int_reif",&p_member_int_reif);
         registry().add("member_bool",&p_member_bool);
         registry().add("gecode_member_bool_reif",&p_member_bool_reif);
+
+        registry().add("black_box", &p_blackbox);
       }
     };
     IntPoster __int_poster;

@@ -110,3 +110,6 @@ predicate gecode_schedule_unary_optional(array[int] of var int: x,
 predicate gecode_schedule_cumulative_optional(array[int] of var int: start,
   array[int] of int: duration, array[int] of int: usage,
   array[int] of var bool: m, int: capacity);
+
+% Potentially move into its own folder?
+predicate black_box(array[int] of var int: input, array[int] of var int: out);
