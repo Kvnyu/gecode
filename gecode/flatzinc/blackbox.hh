@@ -1,6 +1,7 @@
 // We could also introduce a new template with two view arrays?
 // Later we can do below to allow for other types of views like float etc
 // template<class view>
+#include <gecode/flatzinc/blackbox/plugincontainer.hh>
 
 namespace Gecode { namespace FlatZinc {
 
@@ -10,6 +11,7 @@ namespace Gecode { namespace FlatZinc {
             ViewArray<Int::IntView> x;
             /// Array of views
             ViewArray<Int::IntView> y;
+            Gecode::FlatZinc::PluginContainer* bbFunctionContainer;
             /// Constructor for cloning \a p
             BlackBox(Space& home, BlackBox& p);
             // /// Constructor for rewriting \a p during cloning
@@ -28,8 +30,8 @@ namespace Gecode { namespace FlatZinc {
 
             virtual Propagator *copy(Space &home);
 
-            static ExecStatus post(Home home, const ViewArray<Int::IntView>& x, const ViewArray<Int::IntView>& y);
+            static ExecStatus post(Home home, ViewArray<Int::IntView>& x, ViewArray<Int::IntView>& y);
 
     };
-    void black_box(Home home, const IntVarArgs& xv, const IntVarArgs& yv);
+    void blackbox(Home home, const IntVarArgs& xv, const IntVarArgs& yv);
 }}

@@ -105,3 +105,4 @@ examples/tsp
 examples/warehouses
 examples/word-square
 build
+.vscode

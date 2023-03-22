@@ -1566,7 +1566,7 @@ namespace Gecode { namespace FlatZinc {
     void p_blackbox(FlatZincSpace& s, const ConExpr& ce, AST::Node* ann) {
       IntVarArgs input = s.arg2intvarargs(ce[0]);
       IntVarArgs out = s.arg2intvarargs(ce[1]);
-      FlatZinc::black_box(s, input, out);
+      FlatZinc::blackbox(s, input, out);
     }
 
     class IntPoster {

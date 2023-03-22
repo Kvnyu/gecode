@@ -2,6 +2,16 @@
     "files.associations": {
         "mutex": "cpp",
         "streambuf": "cpp",
-        "functional": "cpp"
-    }
+        "functional": "cpp",
+        "__locale": "cpp",
+        "ios": "cpp",
+        "locale": "cpp",
+        "ostream": "cpp",
+        "filesystem": "cpp",
+        "stdexcept": "cpp",
+        "string": "cpp"
+    },
+    "C_Cpp.default.includePath": [
+        "/Users/kevin/Projects/gecode"
+    ]
 }
