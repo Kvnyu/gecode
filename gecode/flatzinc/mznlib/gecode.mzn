@@ -50,6 +50,8 @@ annotation bool_default_search(ann: varsel, ann: valsel);
 annotation set_default_search(ann: varsel, ann: valsel);
 annotation float_default_search(ann: varsel, ann: valsel);
 
+annotation dll_name(string: name);
+
 % Simple LNS: upon restart, for each variable the probability of it being
 % fixed to the previous solution is 'percentage' (out of 100).
 annotation relax_and_reconstruct(array[int] of var int: x, int: percentage);

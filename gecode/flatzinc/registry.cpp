@@ -1566,6 +1566,21 @@ namespace Gecode { namespace FlatZinc {
     void p_blackbox(FlatZincSpace& s, const ConExpr& ce, AST::Node* ann) {
       IntVarArgs input = s.arg2intvarargs(ce[0]);
       IntVarArgs out = s.arg2intvarargs(ce[1]);
+      std::string dll_name;
+      if (ann != nullptr && ann->isArray()) {
+        AST::Array* anns = ann->getArray();
+        const std::vector<AST::Node*>& a = anns->a;
+        for (size_t i = 0; i < a.size(); i++) {
+          if (a[i]->isCall("dll_name")) {
+            AST::Call* c = a[i]->getCall("dll_name");
+            dll_name = c->args->getString();
+          }
+        }
+      }
+      // TODO: Also add an error if the dll file cannot be found at its path
+      if (dll_name.empty()) {
+        throw FlatZinc::Error("Registry", std::string("No dll file found"));
+      }
       FlatZinc::blackbox(s, input, out);
     }
 
