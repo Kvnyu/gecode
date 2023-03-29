@@ -4,7 +4,6 @@
 #include <gecode/flatzinc/blackbox/plugincontainer.hh>
 
 namespace Gecode { namespace FlatZinc {
-
     class BlackBox: public Propagator {
         protected:
             // Array of views
@@ -18,7 +17,7 @@ namespace Gecode { namespace FlatZinc {
             // BlackBox(Space& home, Propagator& p, ViewArray<Int::IntView>& x);
             /// Constructor for creation
         public:
-            BlackBox(Home home, ViewArray<Int::IntView>& x0, ViewArray<Int::IntView>& y0);
+            BlackBox(Home home, ViewArray<Int::IntView>& x0, ViewArray<Int::IntView>& y0, std::string dll_path);
             /// Cost function (defined as low linear)
             virtual PropCost cost(const Space& home, const ModEventDelta& med) const;
             /// Schedule function
@@ -30,8 +29,8 @@ namespace Gecode { namespace FlatZinc {
 
             virtual Propagator *copy(Space &home);
 
-            static ExecStatus post(Home home, ViewArray<Int::IntView>& x, ViewArray<Int::IntView>& y);
+            static ExecStatus post(Home home, ViewArray<Int::IntView>& x, ViewArray<Int::IntView>& y, std::string dll_path);
 
     };
-    void blackbox(Home home, const IntVarArgs& xv, const IntVarArgs& yv);
+    void blackbox(Home home, const IntVarArgs& xv, const IntVarArgs& yv, const std::string dll_path);
 }}

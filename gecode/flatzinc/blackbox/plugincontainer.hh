@@ -1,19 +1,20 @@
 #ifndef PLUGINCONTAINER_H
 #define PLUGINCONTAINER_H
 
-#include "plugin_base.hh"
+#include <vector>
+#include <string>
+#include <type_traits>
 
 namespace Gecode { namespace FlatZinc {
+  using FunctionPtr = std::add_pointer<void(int*, int, int*, int)>::type;
   class PluginContainer {
   public:
     PluginContainer(const std::string& path);
     ~PluginContainer();
-    Gecode::FlatZinc::PluginBase* instance();
+    void runBlackboxFunction(int* in, int length_in, int* out , int length_out);
   private:
+    FunctionPtr blackboxFunctionPtr;
     void* _library;
-    Gecode::FlatZinc::plugin_create_t _create;
-    Gecode::FlatZinc::plugin_destroy_t _destroy;
-    Gecode::FlatZinc::PluginBase* _instance;
   };
 }}
 

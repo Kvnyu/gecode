@@ -821,7 +821,7 @@ FLATZINCSRC0 = flatzinc.cpp registry.cpp branch.cpp blackbox.cpp blackbox/plugin
 FLATZINC_GENSRC0 = parser.tab.cpp lexer.yy.cpp
 FLATZINCHDR0 = ast.hh conexpr.hh option.hh parser.hh \
 	plugin.hh registry.hh symboltable.hh varspec.hh \
-	branch.hh branch.hpp blackbox.hh blackbox/plugincontainer.hh blackbox/plugin_base.hh
+	branch.hh branch.hpp blackbox.hh blackbox/plugincontainer.hh
 
 FLATZINCSRC = $(FLATZINCSRC0:%=gecode/flatzinc/%)
 FLATZINC_GENSRC = $(FLATZINC_GENSRC0:%=gecode/flatzinc/%)

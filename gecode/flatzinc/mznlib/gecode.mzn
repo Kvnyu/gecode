@@ -50,7 +50,7 @@ annotation bool_default_search(ann: varsel, ann: valsel);
 annotation set_default_search(ann: varsel, ann: valsel);
 annotation float_default_search(ann: varsel, ann: valsel);
 
-annotation dll_name(string: name);
+annotation dll_path(string: name);
 
 % Simple LNS: upon restart, for each variable the probability of it being
 % fixed to the previous solution is 'percentage' (out of 100).

@@ -6,23 +6,21 @@
 
 namespace Gecode { namespace FlatZinc {
         void
-        blackbox(Home home, const IntVarArgs& xv, const IntVarArgs& yv){
+        blackbox(Home home, const IntVarArgs& xv, const IntVarArgs& yv, const std::string dll_path){
             ViewArray<Int::IntView> x(home,xv);
             ViewArray<Int::IntView> y(home,yv);
 
             if (home.failed())
                 return;
             PostInfo pi(home);
-            GECODE_ES_FAIL(Gecode::FlatZinc::BlackBox::post(home, x, y));
+            GECODE_ES_FAIL(Gecode::FlatZinc::BlackBox::post(home, x, y, dll_path));
         }
 
         // The x(x0), and y(y0) initialise the values
         // How should I be naming the x0 and y0?
         // How should we pass in the dll file path?
-        BlackBox::BlackBox(Home home, ViewArray<Int::IntView>& x0, ViewArray<Int::IntView>& y0) : Propagator(home), x(x0), y(y0) {
-            // We will make the path a variable that is passed in, in future
-            bbFunctionContainer = new Gecode::FlatZinc::PluginContainer("/Users/kevin/Projects/gecode/dll/square.so");
-
+        BlackBox::BlackBox(Home home, ViewArray<Int::IntView>& x0, ViewArray<Int::IntView>& y0, std::string dll_path) : Propagator(home), x(x0), y(y0) {
+            bbFunctionContainer = new Gecode::FlatZinc::PluginContainer(dll_path);
             x.subscribe(home, *this, Int::PC_INT_VAL);
         }
         // Constructor for cloning
@@ -49,7 +47,6 @@ namespace Gecode { namespace FlatZinc {
             x.cancel(home, *this, Int::PC_INT_VAL);
             (void)Propagator::dispose(home);
             // destroy plugin container
-            bbFunctionContainer->~PluginContainer();
             return sizeof(*this);
         };
 
@@ -57,25 +54,31 @@ namespace Gecode { namespace FlatZinc {
             if (x.assigned()){
                 std::vector<int> in = std::vector<int>(x.size());
                 std::vector<int> out = std::vector<int>(y.size());
+                // std::cerr << "gave it: ";
                 for (int i=0; i < in.size(); i++){
+                    // std::cerr << x[i].val() << " ";
                     in[i] = x[i].val();
                 }
-                PluginBase* pb = bbFunctionContainer->instance();
-                // Are dll calls blocking?
-                pb -> run(in, out);
+                // std::cerr << std::endl;
 
+                bbFunctionContainer -> runBlackboxFunction(in.data(), x.size(), out.data(), y.size());
+
+                // std::cerr << "got back: ";
                 for (int i=0; i < out.size(); i++){
+                    // std::cerr << out[i] << " ";
                     if (y[i].eq(home, out[i]) == Int::ME_INT_FAILED){
                         return ES_FAILED;
                     }
                 }
+
+                // std::cerr << std::endl;
                 return ES_SUBSUMED_;
             }
             return ES_NOFIX;
         };
 
-        ExecStatus BlackBox::post(Home home, ViewArray<Int::IntView>& x, ViewArray<Int::IntView>& y){
-            new (home) BlackBox(home,x,y);
+        ExecStatus BlackBox::post(Home home, ViewArray<Int::IntView>& x, ViewArray<Int::IntView>& y, const std::string dll_path){
+            new (home) BlackBox(home,x,y, dll_path);
             return ES_OK;
         }
 

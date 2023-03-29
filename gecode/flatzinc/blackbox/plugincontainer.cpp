@@ -6,40 +6,31 @@
 #include <string>
 
 namespace Gecode { namespace FlatZinc {
-  PluginContainer::PluginContainer(const std::string& path)
-    : _library(0), _instance(0) {
-    // load library
-    std::cerr << "loading library " << path << std::endl;
-    _library = dlopen(path.c_str(), RTLD_LAZY);
+  PluginContainer::PluginContainer(const std::string& dll_path)
+    : _library(0) {
+    // We will make the path a variable that is passed in, in future
+    std::cerr << "loading library " << dll_path << std::endl;
+    void* _library;
+    _library = dlopen(dll_path.c_str(), RTLD_LAZY);
     if (!_library)
-      throw std::string(dlerror());
+        throw "error loading library\n" + std::string(dlerror());
     dlerror(); // reset errors;
+    std::cerr << "loaded library " << dll_path << " succesfully" << std::endl;
 
     // load create function
-    _create = (plugin_create_t)dlsym(_library, "plugin_create");
-    const char* dlsym_error = dlerror();
-    if (dlsym_error)
-      throw std::string(dlerror());
-
-    // load destroy function
-    _destroy = (plugin_destroy_t)dlsym(_library, "plugin_destroy");
-    dlsym_error = dlerror();
-    if (dlsym_error)
-      throw std::string(dlerror());
-
-    // create instance
-    _instance = _create();
+    blackboxFunctionPtr = (Gecode::FlatZinc::FunctionPtr) dlsym(_library, "run_function");
+    if (!blackboxFunctionPtr)
+      std::cerr << "Couldn't load function: run_function" << std::endl;
+      // throw std::string(dlerror());
   };
 
   PluginContainer::~PluginContainer() {
-    if (_instance)
-      _destroy(_instance);
     if (_library)
       dlclose(_library);
   };
 
-  PluginBase* PluginContainer::instance() {
-    return _instance;
+  void PluginContainer::runBlackboxFunction(int* in , int length_in, int* out, int length_out){
+    (*blackboxFunctionPtr)(in, length_in, out, length_out);
   }
 }
 }
